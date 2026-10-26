@@ -1,0 +1,71 @@
+#include<iostream>
+#include<cstring>
+#include<cctype>
+using namespace std;
+class mystring{
+	char *str;
+	public:
+		mystring(){
+			str = new char[1];
+			str[0]='\0';
+		}
+	mystring(const char* s) {
+		str = new char [strlen(s)+1];
+		strcpy(str,s);
+	}
+		mystring(const mystring& other) {
+        str = new char[strlen(other.str) + 1];
+        strcpy(str, other.str);
+    }
+    ~mystring() {delete[] str;}
+    mystring operator+(const mystring& op2) const {
+	int len = strlen(str) + strlen(op2.str)+1;
+	char* newstr = new char[len];
+	strcpy(newstr, str);
+	strcat(newstr, op2.str);
+	mystring temp(newstr);
+	delete[] newstr;
+	return temp;
+	}
+	mystring& operator=(const mystring& other){
+	if (this != &other){
+	delete[] str;
+	str = new char[strlen(other.str+1)];
+	strcpy(str, other.str);
+	mystring temp(str);
+    }
+	return *this;
+	}
+	bool operator<=(const mystring& other) const{
+	return (strcmp(str, other.str) <= 0);
+	}
+	void toLower(){
+		for(int i=0; str[i]!='\0';i++){
+		 str[i] = tolower(str[i]); }
+    }
+    void toUpper() {
+        for (int i=0; str[i] != '\0'; i++)
+            str[i] = toupper(str[i]);
+    }
+	void show(){ 
+	cout<<str<<endl;
+	}
+};
+int main(){
+	mystring s1;
+	mystring s2("Avni ");
+	mystring s3("Aggarwal");
+	mystring s4 = s2+s3;
+	s2.show();
+	s3.show();
+	s4.show();
+	mystring s5=s4;
+	s5.show();
+	if (s5<=s3)
+	s5.show();
+	else s3.show();
+	s2.toLower();
+	s3.toUpper();
+	s2.show();
+	s3.show();
+}

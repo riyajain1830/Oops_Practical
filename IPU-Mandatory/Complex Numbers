@@ -1,0 +1,34 @@
+#include<iostream>
+using namespace std;
+class complex{
+    int re,im;
+    public:
+        complex(){
+            re=0;
+            im=0;
+        }
+        complex(int r, int i){
+            re=r;
+            im=i;
+        }
+        complex add(complex c){
+            complex temp;
+            temp.re=re+c.re;
+            temp.im=im+c.im;
+            return temp;
+        }
+        void show(){
+            cout<<re<<"+"<<im<<"i";
+        }
+};
+int main(){
+    complex c1(5,6);
+    complex c2(2,3);
+    complex c3=c1.add(c2);
+    cout<<"The first complex number is ";
+    c1.show();
+    cout<<endl<<"The second complex number is ";
+    c2.show();
+    cout<<endl<<"The sum of the two complex numbers is ";
+    c3.show();
+}

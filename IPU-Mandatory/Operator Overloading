@@ -1,0 +1,72 @@
+#include <iostream>
+#include<cstring>
+#include<cctype>
+using namespace std;
+class mystring{
+	char *str;
+	public:
+		mystring(){
+			str=new char[1];
+			str[0]='\0';
+		}
+		mystring (const char*s){
+			str=new char[strlen(s)+1];
+			strcpy(str,s);
+		}
+		mystring(const mystring& from){
+			str=new char[strlen(from.str)+1];
+			strcpy(str,from.str);
+		}
+		~mystring(){delete[]str;
+		}
+		mystring operator+(const mystring&op2)const{
+		int len=strlen(str)+strlen(op2.str)+1;
+		char* new_str =new char[len];
+		strcpy(new_str,str);
+		strcat(new_str, op2.str);
+		mystring temp(new_str);
+		delete[]new_str;
+		return temp;
+		}
+		mystring operator=(const mystring &obj){
+			if(this !=& obj){
+			delete [] str;
+			str= new char[strlen(obj.str)+1];
+			strcpy(str, obj.str);
+			}
+			return *this;
+			
+		}
+		bool operator<=(const mystring & other)const{
+ 		return strcmp(str,other.str)<=0;}		
+		void display() const{
+		cout<<str<<endl;
+		}
+		void toLower(){
+			for(int i=0; str[i]!='\0';i++){
+				str[i]=tolower(str[i]);
+			}
+		}
+		void toUpper(){
+			for(int i=0; str[i]!='\0';i++){
+				str[i]=toupper(str[i]);
+			}
+		}
+};
+int main(){
+	mystring s1;
+	mystring s2("Hello");
+	mystring s3("world");
+	mystring s4=s2+s3;
+	mystring s5=s4;
+	s2.display();
+	s3.display();
+	s4.display();
+	s5.display();
+	if(s2<=s4){
+		s2.display();}
+	s2.toLower();
+	s3.toUpper();
+	s2.display();
+	s3.display();  
+}

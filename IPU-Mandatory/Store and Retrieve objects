@@ -1,0 +1,83 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <cstring>
+using namespace std;
+
+class Student {
+    char  name[30];     // char array (NOT std::string) so the object can be written to a file safely
+    int   age;
+    char  sex;          // 'M' or 'F'
+    float height;       // in cm
+    float weight;       // in kg
+
+public:
+    // Member function 1: take input from the keyboard
+    void readData() {
+        cout << "Enter name   : ";
+        cin >> ws;                                  // skip leftover newline
+        cin.getline(name, sizeof(name));            // allows spaces in the name
+        cout << "Enter age    : ";
+        cin >> age;
+        cout << "Enter sex (M/F): ";
+        cin >> sex;
+        cout << "Enter height (cm): ";
+        cin >> height;
+        cout << "Enter weight (kg): ";
+        cin >> weight;
+    }
+
+    // Member function 2: display the object nicely
+    void show() const {
+        cout << left  << setw(20) << name
+             << right << setw(5)  << age
+             << setw(6)  << sex
+             << setw(10) << fixed << setprecision(1) << height
+             << setw(10) << weight << endl;
+    }
+
+    static void header() {
+        cout << left  << setw(20) << "Name"
+             << right << setw(5)  << "Age"
+             << setw(6)  << "Sex"
+             << setw(10) << "Height"
+             << setw(10) << "Weight" << endl;
+        cout << string(51, '-') << endl;
+    }
+};
+
+int main() {
+    const char *fileName = "student.dat";
+    int n;
+
+    // ---------- STORE: write() ----------
+    cout << "How many students do you want to store? ";
+    cin >> n;
+
+    ofstream fout(fileName, ios::binary);           // open file in binary mode
+    for (int i = 0; i < n; i++) {
+        Student s;
+        cout << "\n--- Student " << i + 1 << " ---\n";
+        s.readData();
+        fout.write(reinterpret_cast<char*>(&s), sizeof(s));   // save whole object
+    }
+    fout.close();
+    cout << "\nData saved to " << fileName << endl;
+
+    // ---------- RETRIEVE: read() ----------
+    ifstream fin(fileName, ios::binary);
+    if (!fin) {
+        cout << "Cannot open file.\n";
+        return 1;
+    }
+
+    cout << "\nStudents read from file:\n";
+    Student::header();
+    Student s;
+    while (fin.read(reinterpret_cast<char*>(&s), sizeof(s))) {   // read one object at a time
+        s.show();
+    }
+    fin.close();
+
+    return 0;
+}

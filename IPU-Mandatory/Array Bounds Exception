@@ -1,0 +1,52 @@
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+class SafeArray {
+    int arr[10];
+public:
+    SafeArray() {                                   // initialize all elements to 0
+        for (int i = 0; i < 10; i++) arr[i] = 0;
+    }
+
+    // Member function 1: store value at index
+    void set(int index, int value) {
+        if (index < 0 || index >= 10)
+            throw out_of_range("Invalid index " + to_string(index) +
+                               " (valid range is 0 to 9)");
+        arr[index] = value;
+    }
+
+    // Member function 2: return value at index
+    int get(int index) const {
+        if (index < 0 || index >= 10)
+            throw out_of_range("Invalid index " + to_string(index) +
+                               " (valid range is 0 to 9)");
+        return arr[index];
+    }
+};
+
+int main() {
+    SafeArray a;
+
+    try {
+        a.set(2, 50);
+        cout << "a[2] = " << a.get(2) << endl;
+
+        a.set(10, 99);                              // invalid: exception thrown here
+        cout << "This line is skipped\n";           // never executed
+    }
+    catch (const out_of_range &e) {
+        cout << "Exception caught: " << e.what() << endl;
+    }
+
+    try {
+        cout << a.get(-1) << endl;                  // invalid: exception thrown here
+    }
+    catch (const out_of_range &e) {
+        cout << "Exception caught: " << e.what() << endl;
+    }
+
+    cout << "Program continues normally." << endl;
+    return 0;
+}
